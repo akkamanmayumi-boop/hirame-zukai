@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>その"わからない"、図解にします。｜ヒラメの図解ノート</title>
+<meta name="description" content="看護師歴32年のヒラメが、むずかしい疾患を身近なたとえ話と図解でやさしく解説。Threadsで毎日投稿中・リクエスト受付中。" />
+
+<!-- シェアされたときの見え方（OGP）。SITE_URL は公開後のURLに置きかえる -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="その&quot;わからない&quot;、図解にします。｜ヒラメの図解ノート" />
+<meta property="og:description" content="看護師歴32年のヒラメが、むずかしい疾患を身近なたとえ話と図解でやさしく解説。Threadsで毎日投稿中・リクエスト受付中。" />
+<meta property="og:url" content="SITE_URL/" />
+<meta property="og:image" content="SITE_URL/img/og.png" />
+<meta property="og:locale" content="ja_JP" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- タブのアイコン -->
+<link rel="icon" type="image/png" href="img/favicon.png" />
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  /* ===== 色（ここを変えると全体の色が変わる） ===== */
+  :root {
+    --paper: #FFFBF2;        /* ノートの紙の色 */
+    --grid: #F3E6CC;         /* 方眼の線 */
+    --ink: #3B2F2A;          /* 文字の色 */
+    --ink-soft: #7A6A60;     /* うすい文字 */
+    --accent: #F0821E;       /* メイン：オレンジ */
+    --accent-deep: #D2660A;  /* ボタンを押したとき */
+    --marker: #FFE27A;       /* 蛍光ペンの黄色 */
+    --tape: rgba(255, 196, 120, .75); /* マスキングテープ */
+    --hand: "Klee One", "Zen Maru Gothic", sans-serif;            /* 手書き風 */
+    --sans: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--sans); line-height: 1.8;
+    word-break: auto-phrase; /* 日本語を言葉の区切りで改行する */
+    background-color: var(--paper);
+    /* 方眼ノートの線 */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  img { max-width: 100%; display: block; }
+  p, li, h1, h2, h3 { text-wrap: pretty; }
+  a { color: inherit; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  /* ===== ヘッダー ===== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255, 251, 242, .88); backdrop-filter: blur(8px);
+    border-bottom: 2px dashed var(--grid);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: .6rem; font-weight: 900; font-size: 1.15rem; text-decoration: none; }
+  .brand img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; object-position: 50% 4%; background: #FFF1CC; } /* 全身イラストの顔まわりだけを丸く表示 */
+
+  /* ===== ボタン ===== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    padding: .8rem 1.4rem; border-radius: 999px; font-weight: 700; text-decoration: none;
+    transition: transform .15s, background .15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 0 var(--accent-deep); }
+  .btn-primary:hover { background: var(--accent-deep); }
+  .btn-ghost { background: #fff; color: var(--accent-deep); border: 2px solid var(--accent); }
+  .btn-sm { padding: .5rem 1rem; font-size: .9rem; }
+
+  /* ===== ヒーロー ===== */
+  .hero { overflow-x: clip; padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(3rem, 8vw, 6rem); }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+
+  /* 吹き出し「わからない…」→「なるほど！」 */
+  .bubbles { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+  .bubble {
+    font-family: var(--hand); font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+    padding: .35rem 1.1rem; border-radius: 1.4rem; border: 2px solid; background: #fff; position: relative;
+  }
+  .bubble::after { /* 吹き出しのしっぽ */
+    content: ""; position: absolute; left: 22px; bottom: -9px; width: 14px; height: 14px;
+    background: #fff; border-right: 2px solid; border-bottom: 2px solid; transform: rotate(45deg);
+    border-color: inherit;
+  }
+  .bubble.q { color: var(--ink-soft); border-color: #CDBFB4; transform: rotate(-3deg); }
+  .bubble.a { color: var(--accent-deep); border-color: var(--accent); transform: rotate(2deg); }
+  .arrow { font-family: var(--hand); color: var(--accent); font-size: 1.6rem; }
+
+  h1 { font-weight: 900; font-size: clamp(2.1rem, 5.6vw, 3.6rem); line-height: 1.35; margin: 0 0 1.2rem; }
+  h1 .mark { white-space: nowrap; background: linear-gradient(transparent 58%, var(--marker) 58%); padding: 0 .1em; }
+  .lead { text-wrap: pretty; font-size: clamp(1rem, 2.2vw, 1.12rem); color: var(--ink-soft); margin: 0 0 1.6rem; }
+  .lead b { color: var(--ink); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.8rem; padding: 0; list-style: none; }
+  .badges li {
+    font-weight: 700; font-size: .9rem; padding: .3rem .8rem; border-radius: .5rem;
+    background: #fff; border: 1.5px solid var(--grid);
+  }
+  .badges li span { color: var(--accent); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: .8rem; }
+
+  /* ===== 付せん（ボタン下の一言） ===== */
+  .sticky {
+    position: relative; display: inline-block; margin: 1.2rem 0 0;
+    font-family: var(--hand); color: var(--ink); font-size: 1.02rem; line-height: 1.7;
+    background: var(--marker); padding: .6rem 1rem;
+    filter: drop-shadow(0 3px 5px rgba(80, 50, 20, .18));
+  }
+  .nb { white-space: nowrap; } /* この中では改行しない */
+  /* ヒラメの形（目は左側！） */
+  .sticky.fish {
+    border-radius: 50% 42% 42% 50% / 50%; padding: .8rem 1.6rem .8rem 2.4rem; margin-right: 34px;
+    transform: rotate(-2deg);
+  }
+  .sticky.fish::before { /* 目 */
+    content: ""; position: absolute; left: 14px; top: 38%; width: 9px; height: 9px;
+    background: var(--ink); border-radius: 50%; box-shadow: 0 0 0 3px #fff;
+  }
+  .sticky.fish::after { /* しっぽ */
+    content: ""; position: absolute; right: -30px; top: 50%; width: 36px; height: 40px;
+    background: var(--marker); transform: translateY(-50%);
+    clip-path: polygon(0 50%, 100% 0, 82% 50%, 100% 100%);
+  }
+
+  /* 図解をノートに貼ったように重ねる */
+  .stack { position: relative; aspect-ratio: 1 / 1.05; }
+  .card {
+    position: absolute; width: 62%; margin: 0; background: #fff; padding: 8px;
+    box-shadow: 0 10px 24px rgba(80, 50, 20, .16); border-radius: 4px;
+  }
+  .card::before { /* マスキングテープ */
+    content: ""; position: absolute; top: -12px; left: 50%; width: 90px; height: 24px;
+    background: var(--tape); transform: translateX(-50%) rotate(-4deg);
+  }
+  .card img { border-radius: 2px; }
+  .card.c1 { left: 0;   top: 6%;  transform: rotate(-6deg); }
+  .card.c2 { right: 0;  top: 0;   transform: rotate(5deg); }
+  .card.c3 { left: 19%; bottom: 0; transform: rotate(-1deg); z-index: 2; }
+
+  @media (max-width: 820px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .stack { max-width: 460px; width: 100%; margin-inline: auto; }
+  }
+
+  /* ===== セクション共通 ===== */
+  .sec { padding: clamp(3.5rem, 9vw, 6rem) 0; }
+  .sec-head { text-align: center; margin-bottom: clamp(2rem, 5vw, 3rem); }
+  .sec-label { font-family: var(--hand); color: var(--accent); font-size: 1rem; margin: 0; }
+  .sec-head h2 { font-weight: 900; font-size: clamp(1.6rem, 4.2vw, 2.4rem); line-height: 1.45; margin: .3rem 0 .6rem; }
+  .sec-head h2 .mark { background: linear-gradient(transparent 60%, var(--marker) 60%); }
+  .sec-head p { color: var(--ink-soft); margin: 0; }
+  /* 白い紙を1枚置いたような箱 */
+  .page {
+    background: #fff; border-radius: 6px; padding: clamp(1.6rem, 5vw, 3rem);
+    box-shadow: 0 8px 24px rgba(80, 50, 20, .10); position: relative;
+  }
+
+  /* ===== 共感 ===== */
+  .worry { max-width: 720px; margin-inline: auto; }
+  .checks { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: .9rem; }
+  .checks li { display: flex; gap: .8rem; align-items: flex-start; font-size: clamp(1.02rem, 2.4vw, 1.15rem); font-weight: 700; }
+  .checks li::before { /* 手書きのチェック */
+    content: "✓"; flex: none; width: 1.6rem; height: 1.6rem; display: grid; place-items: center;
+    font-family: var(--hand); color: var(--accent); border: 2px solid var(--accent); border-radius: 5px;
+    transform: rotate(-4deg); margin-top: .15rem;
+  }
+  .answer { text-align: center; border-top: 2px dashed var(--grid); padding-top: 1.8rem; }
+  .answer .big { font-weight: 900; font-size: clamp(1.25rem, 3.4vw, 1.6rem); margin: 0 0 .6rem; line-height: 1.6; }
+  .answer .big .mark { background: linear-gradient(transparent 60%, var(--marker) 60%); }
+  .answer p { margin: 0; color: var(--ink-soft); }
+
+  /* ===== 図解ギャラリー ===== */
+  .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(1.4rem, 3vw, 2.2rem); }
+  .gallery .zk { box-sizing: border-box; width: calc((100% - 2 * clamp(1.4rem, 3vw, 2.2rem)) / 3); } /* 3列。あまった図解は真ん中に寄せる */
+  .zk {
+    all: unset; cursor: zoom-in; display: block; background: #fff; padding: 8px 8px 0; position: relative;
+    box-shadow: 0 8px 20px rgba(80, 50, 20, .14); border-radius: 4px; transition: transform .2s;
+  }
+  .zk:nth-child(odd) { transform: rotate(-1.5deg); }
+  .zk:nth-child(even) { transform: rotate(1.5deg); }
+  .zk:hover, .zk:focus-visible { transform: rotate(0) scale(1.03); }
+  .zk:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  .zk::before {
+    content: ""; position: absolute; top: -10px; left: 50%; width: 70px; height: 20px;
+    background: var(--tape); transform: translateX(-50%) rotate(-3deg);
+  }
+  .zk .cap { padding: .6rem .3rem .8rem; font-size: .92rem; line-height: 1.5; }
+  .zk .cap small { display: block; color: var(--ink-soft); font-size: .78rem; }
+  .zk .cap b { font-family: var(--hand); color: var(--accent-deep); font-size: 1rem; }
+  .gallery-note { text-align: center; margin: 2.4rem 0 0; }
+  .gallery-note p { font-family: var(--hand); color: var(--ink-soft); margin: 0 0 1rem; }
+  /* 拡大表示 */
+  dialog.zoom { border: 0; padding: 0; background: transparent; max-width: min(92vw, 720px); }
+  dialog.zoom::backdrop { background: rgba(40, 28, 20, .7); }
+  dialog.zoom img { border-radius: 6px; max-height: 86vh; width: auto; margin-inline: auto; }
+  dialog.zoom button {
+    display: block; margin: .8rem auto 0; font: inherit; font-weight: 700; color: #fff;
+    background: var(--accent); border: 0; border-radius: 999px; padding: .5rem 1.4rem; cursor: pointer;
+  }
+
+  /* ===== 強み ===== */
+  .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2rem); }
+  .point { text-align: center; }
+  .point .num {
+    width: 3.2rem; height: 3.2rem; margin: 0 auto 1rem; display: grid; place-items: center;
+    font-family: var(--hand); font-size: 1.5rem; color: var(--accent-deep);
+    border: 2.5px solid var(--accent); border-radius: 50% 45% 52% 48%; transform: rotate(-6deg);
+  }
+  .point h3 { font-weight: 900; font-size: 1.2rem; margin: 0 0 .6rem; line-height: 1.5; }
+  .point p { color: var(--ink-soft); margin: 0; font-size: .97rem; text-align: left; }
+
+  /* ===== こんな人におすすめ ===== */
+  .for { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 1.6rem); max-width: 960px; margin-inline: auto; }
+  .for-item {
+    background: var(--marker); padding: 1.4rem 1.2rem 1.2rem; position: relative;
+    filter: drop-shadow(0 4px 6px rgba(80, 50, 20, .16));
+  }
+  .for-item:nth-child(1) { transform: rotate(-2deg); }
+  .for-item:nth-child(2) { transform: rotate(1.5deg); background: #FFD6A8; }
+  .for-item:nth-child(3) { transform: rotate(-1deg); background: #FFE9B8; }
+  .for-item h3 { font-family: var(--hand); font-size: 1.2rem; margin: 0 0 .4rem; }
+  .for-item p { margin: 0; font-size: .95rem; }
+
+  /* ===== リクエストの送り方 ===== */
+  .steps { list-style: none; padding: 0; margin: 0 0 2.4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding-top: 2.6rem; text-align: center; }
+  .steps li::before {
+    content: "STEP " counter(s); position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    font-weight: 900; font-size: .85rem; letter-spacing: .08em; color: #fff; background: var(--accent);
+    padding: .2rem .9rem; border-radius: 999px;
+  }
+  .steps h3 { font-weight: 900; font-size: 1.1rem; margin: 0 0 .4rem; }
+  .steps p { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+  .dm-sample { max-width: 480px; margin: 0 auto 2rem; display: grid; gap: .7rem; }
+  .dm { margin: 0; padding: .7rem 1.1rem; border-radius: 1.2rem; max-width: 85%; font-size: .97rem; line-height: 1.6; }
+  .dm.me { justify-self: end; background: var(--accent); color: #fff; border-bottom-right-radius: .3rem; }
+  .dm.her { justify-self: start; background: #F3ECE2; border-bottom-left-radius: .3rem; }
+  .dm-caption { text-align: center; font-family: var(--hand); color: var(--ink-soft); margin: 0 0 .4rem; font-size: .95rem; }
+  .request-cta { text-align: center; }
+  .request-cta .small { margin: 1rem 0 0; font-size: .85rem; color: var(--ink-soft); }
+
+  /* ===== プロフィール ===== */
+  .prof { display: grid; grid-template-columns: 200px 1fr; gap: clamp(1.6rem, 4vw, 3rem); align-items: center; max-width: 900px; margin-inline: auto; }
+  .prof-photo { position: relative; display: grid; justify-items: center; align-items: end; }
+  .prof-photo::before { /* 後ろの黄色い丸 */
+    content: ""; position: absolute; bottom: 0; left: 50%; width: 190px; height: 190px; transform: translateX(-50%);
+    border-radius: 50%; background: var(--marker); box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--accent);
+  }
+  .prof-photo img { position: relative; height: 260px; width: auto; }
+  .prof h2 { font-weight: 900; font-size: clamp(1.4rem, 3.4vw, 1.9rem); margin: .2rem 0 .2rem; }
+  .prof .role { color: var(--ink-soft); font-size: .95rem; margin: 0 0 1.2rem; }
+  .prof p { margin: 0 0 1rem; }
+  .prof .whisper { font-family: var(--hand); color: var(--accent-deep); margin: 1.4rem 0 0; font-size: 1.05rem; }
+
+  /* ===== 最後のボタン ===== */
+  .final { text-align: center; }
+  .final h2 { font-weight: 900; font-size: clamp(1.6rem, 4.4vw, 2.5rem); line-height: 1.5; margin: 0 0 1rem; }
+  .final h2 .mark { background: linear-gradient(transparent 60%, var(--marker) 60%); }
+  .final p { color: var(--ink-soft); margin: 0 0 2rem; }
+  .final .cta-row { justify-content: center; }
+
+  /* ===== フッター ===== */
+  footer { padding: 2.6rem 0 3rem; text-align: center; border-top: 2px dashed var(--grid); background: rgba(255, 251, 242, .9); }
+  footer .motto { font-family: var(--hand); font-size: clamp(1.2rem, 3vw, 1.5rem); color: var(--accent-deep); margin: 0 0 1rem; }
+  footer .links { margin: 0 0 .8rem; }
+  footer .links a { font-weight: 700; color: var(--ink); }
+  footer small { color: var(--ink-soft); }
+
+  @media (max-width: 820px) {
+    .gallery .zk { width: calc((100% - clamp(1.4rem, 3vw, 2.2rem)) / 2); }
+    .points, .for, .steps { grid-template-columns: 1fr; }
+    .point p { text-align: center; }
+    .for { max-width: 420px; }
+    .prof { grid-template-columns: 1fr; text-align: center; }
+    .prof-photo img { height: 220px; }
+    .prof-photo::before { width: 160px; height: 160px; }
+    .prof .text { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav wrap">
+      <a class="brand" href="#">
+        <img src="img/hirame.png" alt="ヒラメのアイコン" />
+        ヒラメ
+      </a>
+      <a class="btn btn-primary btn-sm" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">
+        フォローする
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== ヒーロー ===== -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="bubbles" aria-hidden="true">
+            <span class="bubble q">わからない…</span>
+            <span class="arrow">→</span>
+            <span class="bubble a">なるほど！</span>
+          </div>
+
+          <h1>その<span class="mark">"わからない"</span>、<br />図解にします。</h1>
+
+          <p class="lead">
+            教科書では頭に入らない疾患を、<b>身近なたとえ話と図解</b>でやさしく解説。<br />
+            看護師歴32年のヒラメが、毎日Threadsで発信しています。
+          </p>
+
+          <ul class="badges">
+            <li><span>●</span> 毎日投稿</li>
+            <li><span>●</span> リクエスト受付中</li>
+            <li><span>●</span> 現役看護師 32年</li>
+          </ul>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">Threadsで図解を見る</a>
+            <a class="btn btn-ghost" href="#request">DMでリクエストする</a>
+          </div>
+          <p class="sticky fish"><span class="nb">「これがわからない」の</span><span class="nb">一言だけでOK。</span><br />こっそりDMで送ってね。</p>
+        </div>
+
+        <div class="stack">
+          <figure class="card c1"><img src="img/zukai-1-shinfuzen.jpg" alt="心不全は「ポンプが弱ったポット」だ" /></figure>
+          <figure class="card c2"><img src="img/zukai-4-esbl.png" alt="ESBL産生菌は「特殊装備を持った泥棒」だ" /></figure>
+          <figure class="card c3"><img src="img/zukai-6-netsukei.jpg" alt="熱型は「体温が描く波の形」だ" /></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 共感 ===== -->
+    <section class="sec" id="nayami">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="sec-label">― こんなこと、ありませんか？ ―</p>
+          <h2>勉強しているのに、<br /><span class="mark">頭に入らない</span>…</h2>
+        </div>
+        <div class="page worry">
+          <ul class="checks">
+            <li>教科書を読んでも、文字が目の上をすべっていく</li>
+            <li>丸暗記したのに、次の日にはもう忘れている</li>
+            <li>病態・症状・治療が、バラバラのままつながらない</li>
+            <li>先輩に「わからない」と言い出せない</li>
+          </ul>
+          <div class="answer">
+            <p class="big">それ、あなたのせいじゃありません。<br /><span class="mark">むずかしい言葉のまま</span>覚えようとしているだけ。</p>
+            <p>身近なモノにたとえて「絵」で見ると、するっと頭に入ります。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 図解ギャラリー ===== -->
+    <section class="sec" id="zukai">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="sec-label">― たとえば、こんな図解です ―</p>
+          <h2>むずかしい疾患も、<br /><span class="mark">"たとえ話"</span>なら一枚でわかる</h2>
+          <p>タップすると大きく見られます</p>
+        </div>
+        <div class="gallery">
+          <button class="zk" type="button" data-src="img/zukai-1-shinfuzen.jpg">
+            <img src="img/zukai-1-shinfuzen.jpg" alt="心不全は「ポンプが弱ったポット」だ" loading="lazy" />
+            <span class="cap"><small>心不全</small><b>ポンプが弱ったポット</b></span>
+          </button>
+          <button class="zk" type="button" data-src="img/zukai-2-benkyousaku.jpg">
+            <img src="img/zukai-2-benkyousaku.jpg" alt="大動脈弁狭窄症は「開かない自動ドア」だ" loading="lazy" />
+            <span class="cap"><small>大動脈弁狭窄症</small><b>開かない自動ドア</b></span>
+          </button>
+          <button class="zk" type="button" data-src="img/zukai-3-nyoukan.jpg">
+            <img src="img/zukai-3-nyoukan.jpg" alt="尿管結石は「細い道につまった小石」だ" loading="lazy" />
+            <span class="cap"><small>尿管結石</small><b>細い道につまった小石</b></span>
+          </button>
+          <button class="zk" type="button" data-src="img/zukai-4-esbl.png">
+            <img src="img/zukai-4-esbl.png" alt="ESBL産生菌は「特殊装備を持った泥棒」だ" loading="lazy" />
+            <span class="cap"><small>ESBL産生菌</small><b>特殊装備を持った泥棒</b></span>
+          </button>
+          <button class="zk" type="button" data-src="img/zukai-6-netsukei.jpg">
+            <img src="img/zukai-6-netsukei.jpg" alt="熱型は「体温が描く波の形」だ" loading="lazy" />
+            <span class="cap"><small>熱型</small><b>体温が描く波の形</b></span>
+          </button>
+        </div>
+        <div class="gallery-note">
+          <p>ESBLや熱型は、シリーズで順番に学べます。続きはThreadsで！</p>
+          <a class="btn btn-primary" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">ほかの図解もThreadsで見る</a>
+        </div>
+      </div>
+      <dialog class="zoom" id="zoom">
+        <img src="" alt="" />
+        <form method="dialog"><button>とじる</button></form>
+      </dialog>
+    </section>
+
+    <!-- ===== 強み ===== -->
+    <section class="sec" id="tsuyomi">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="sec-label">― ヒラメの図解が選ばれる理由 ―</p>
+          <h2>だから、<span class="mark">わかる</span>。だから、<span class="mark">伝えられる</span>。</h2>
+        </div>
+        <div class="page">
+          <div class="points">
+            <div class="point">
+              <div class="num">1</div>
+              <h3>身近なものにたとえる</h3>
+              <p>ポット、自動ドア、泥棒…。毎日見ているものにたとえるので、イメージで覚えられます。患者さんや後輩に説明するときにも、そのまま使えます。</p>
+            </div>
+            <div class="point">
+              <div class="num">2</div>
+              <h3>看護師歴32年・現役</h3>
+              <p>今も現場に立つ看護師が作っています。「現場で本当に必要なところ」をしぼって伝えます。</p>
+            </div>
+            <div class="point">
+              <div class="num">3</div>
+              <h3>リクエストに応える</h3>
+              <p>「これがわからない」と送ってもらえたら、図解にします。あなたの"わからない"から、次の図解が生まれます。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== こんな人におすすめ ===== -->
+    <section class="sec" id="osusume">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="sec-label">― こんな人におすすめ ―</p>
+          <h2>ひとつでも当てはまったら、<br /><span class="mark">のぞいてみてください</span></h2>
+        </div>
+        <div class="for">
+          <div class="for-item">
+            <h3>丸暗記がつらい人</h3>
+            <p>覚えても覚えても抜けていく…。イメージで覚えると、忘れにくくなります。</p>
+          </div>
+          <div class="for-item">
+            <h3>教える立場の人</h3>
+            <p>新人さんや学生さんへの説明に。たとえ話は、そのまま指導に使えます。</p>
+          </div>
+          <div class="for-item">
+            <h3>勉強が苦手な人</h3>
+            <p>文字ばかりの本はしんどい…。そんな人こそ、まず絵から入ってみてください。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== リクエストの送り方 ===== -->
+    <section class="sec" id="request">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="sec-label">― リクエストの送り方 ―</p>
+          <h2>あなたの<span class="mark">"わからない"</span>を<br />教えてください</h2>
+          <p>むずかしく考えなくて大丈夫。一言でOKです。</p>
+        </div>
+        <div class="page">
+          <ol class="steps">
+            <li>
+              <h3>Threadsをひらく</h3>
+              <p>下のボタンから、ヒラメのプロフィールへ。</p>
+            </li>
+            <li>
+              <h3>DMで一言おくる</h3>
+              <p>「○○がわからない」だけでOK。<br />こっそり送れるので安心です。</p>
+            </li>
+            <li>
+              <h3>図解になって届く</h3>
+              <p>あなたの"わからない"が、図解になって投稿されるかも！</p>
+            </li>
+          </ol>
+
+          <p class="dm-caption">たとえば、こんなDMで大丈夫</p>
+          <div class="dm-sample" aria-label="DMの例">
+            <p class="dm me">心電図の波形が、何回見てもわかりません…</p>
+            <p class="dm her">送ってくれてありがとう！<br />図解にしてみますね🐟</p>
+          </div>
+
+          <div class="request-cta">
+            <a class="btn btn-primary" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">ThreadsでDMを送る</a>
+            <p class="small">投稿へのコメントでのリクエストも大歓迎です。<br />※すべてのリクエストにお応えできない場合もあります。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== プロフィール ===== -->
+    <section class="sec" id="profile">
+      <div class="wrap">
+        <div class="page prof">
+          <div class="prof-photo"><img src="img/hirame.png" alt="ヒラメのイラスト" loading="lazy" /></div>
+          <div>
+            <p class="sec-label">― 図解をつくっている人 ―</p>
+            <h2>ヒラメ</h2>
+            <p class="role">看護師歴32年・現役ナース ／ Threads @hirame_2start</p>
+            <div class="text">
+              <p>新人のころ、私も丸暗記でつぶれかけました。知識がつながりはじめたのは、勇気を出して「わからない」と口に出し、人に聞けたときでした。</p>
+              <p>「わからない」は、恥ずかしいことではありません。そこから学びが始まる、いちばん大事な一言です。だから私は、あなたの「わからない」を、「なるほど！」に変える図解をつくっています。</p>
+            </div>
+            <p class="whisper">― 50代からでも、あきらめないで。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 最後のボタン ===== -->
+    <section class="sec final">
+      <div class="wrap">
+        <p class="sec-label">― さいごに ―</p>
+        <h2>今日の<span class="mark">"わからない"</span>を、<br />明日の"なるほど"に。</h2>
+        <p>毎日、図解を投稿しています。まずはのぞいてみてください。</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">Threadsで図解を見る</a>
+          <a class="btn btn-ghost" href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">DMでリクエストする</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="motto">"わからない"が言えるのは、最強。</p>
+      <p class="links"><a href="https://www.threads.net/@hirame_2start" target="_blank" rel="noopener">Threads @hirame_2start</a></p>
+      <small>© 2026 ヒラメ</small>
+    </div>
+  </footer>
+
+  <script>
+    // 図解をタップしたら大きく表示する
+    const zoom = document.getElementById("zoom");
+    const zoomImg = zoom.querySelector("img");
+    document.querySelectorAll(".zk").forEach((b) => {
+      b.addEventListener("click", () => {
+        zoomImg.src = b.dataset.src;
+        zoomImg.alt = b.querySelector("img").alt;
+        zoom.showModal();
+      });
+    });
+    zoom.addEventListener("click", (e) => { if (e.target === zoom) zoom.close(); }); // 外側タップでも閉じる
+  </script>
+</body>
+</html>
